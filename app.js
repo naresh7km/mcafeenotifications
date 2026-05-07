@@ -1,16 +1,76 @@
 // App Data
 const apps = {
-    'explorer': { title: 'エクスプローラー', icon: '📁', width: 800, height: 500, color: '#f0ca43' },
-    'edge': { title: 'Microsoft Edge', icon: '🌐', width: 900, height: 600, color: '#0078d7' },
-    'recycle': { title: 'ごみ箱', icon: '🗑️', width: 700, height: 450, color: '#a0a0a0' },
-    'pc': { title: 'PC', icon: '💻', width: 800, height: 500, color: '#0078d7' },
-    'notepad': { title: 'メモ帳', icon: '📝', width: 600, height: 400, color: '#00cc6a' },
-    'settings': { title: '設定', icon: '⚙️', width: 800, height: 550, color: '#0078d7' },
-    'store': { title: 'Microsoft Store', icon: '🛍️', width: 900, height: 600, color: '#ffffff' },
-    'mail': { title: 'メール', icon: '✉️', width: 800, height: 500, color: '#0078d7' },
-    'calc': { title: '電卓', icon: '🧮', width: 320, height: 500, color: '#0078d7' },
-    'paint': { title: 'ペイント', icon: '🎨', width: 800, height: 600, color: '#0078d7' },
-    'security': { title: 'McAfee Security', icon: '🛡️', width: 900, height: 650, color: '#E51A25' }
+  explorer: {
+    title: "エクスプローラー",
+    icon: "📁",
+    width: 800,
+    height: 500,
+    color: "#f0ca43",
+  },
+  edge: {
+    title: "Microsoft Edge",
+    icon: "🌐",
+    width: 900,
+    height: 600,
+    color: "#0078d7",
+  },
+  recycle: {
+    title: "ごみ箱",
+    icon: "🗑️",
+    width: 700,
+    height: 450,
+    color: "#a0a0a0",
+  },
+  pc: { title: "PC", icon: "💻", width: 800, height: 500, color: "#0078d7" },
+  notepad: {
+    title: "メモ帳",
+    icon: "📝",
+    width: 600,
+    height: 400,
+    color: "#00cc6a",
+  },
+  settings: {
+    title: "設定",
+    icon: "⚙️",
+    width: 800,
+    height: 550,
+    color: "#0078d7",
+  },
+  store: {
+    title: "Microsoft Store",
+    icon: "🛍️",
+    width: 900,
+    height: 600,
+    color: "#ffffff",
+  },
+  mail: {
+    title: "メール",
+    icon: "✉️",
+    width: 800,
+    height: 500,
+    color: "#0078d7",
+  },
+  calc: {
+    title: "電卓",
+    icon: "🧮",
+    width: 320,
+    height: 500,
+    color: "#0078d7",
+  },
+  paint: {
+    title: "ペイント",
+    icon: "🎨",
+    width: 800,
+    height: 600,
+    color: "#0078d7",
+  },
+  security: {
+    title: "McAfee Security",
+    icon: "🛡️",
+    width: 900,
+    height: 650,
+    color: "#E51A25",
+  },
 };
 
 // State
@@ -19,136 +79,157 @@ let zIndexCounter = 100;
 let isDesktop = true;
 
 // DOM Elements
-const desktop = document.getElementById('desktop');
-const desktopIcons = document.getElementById('desktopIcons');
-const contextMenu = document.getElementById('contextMenu');
-const windowsContainer = document.getElementById('windowsContainer');
-const startMenu = document.getElementById('startMenu');
-const startBtn = document.getElementById('startBtn');
-const taskbarApps = document.getElementById('taskbarApps');
-const taskbarClock = document.getElementById('taskbarClock');
-const clockTime = document.getElementById('clockTime');
-const clockDate = document.getElementById('clockDate');
-const notifBtn = document.getElementById('notifBtn');
-const notifPanel = document.getElementById('notifPanel');
-const widgetBtn = document.getElementById('widgetBtn');
+const desktop = document.getElementById("desktop");
+const desktopIcons = document.getElementById("desktopIcons");
+const contextMenu = document.getElementById("contextMenu");
+const windowsContainer = document.getElementById("windowsContainer");
+const startMenu = document.getElementById("startMenu");
+const startBtn = document.getElementById("startBtn");
+const taskbarApps = document.getElementById("taskbarApps");
+const taskbarClock = document.getElementById("taskbarClock");
+const clockTime = document.getElementById("clockTime");
+const clockDate = document.getElementById("clockDate");
+const notifBtn = document.getElementById("notifBtn");
+const notifPanel = document.getElementById("notifPanel");
+const widgetBtn = document.getElementById("widgetBtn");
 
 // Initialize Clock
 function updateClock() {
-    const now = new Date();
-    const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    const timeStr = `${hours}:${minutes}`;
-    
-    const year = now.getFullYear();
-    const month = now.getMonth() + 1;
-    const date = now.getDate();
-    const days = ['日', '月', '火', '水', '木', '金', '土'];
-    const dayStr = days[now.getDay()];
-    
-    clockTime.textContent = timeStr;
-    clockDate.textContent = `${year}/${month.toString().padStart(2, '0')}/${date.toString().padStart(2, '0')}`;
+  const now = new Date();
+  const hours = now.getHours().toString().padStart(2, "0");
+  const minutes = now.getMinutes().toString().padStart(2, "0");
+  const timeStr = `${hours}:${minutes}`;
+
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const date = now.getDate();
+  const days = ["日", "月", "火", "水", "木", "金", "土"];
+  const dayStr = days[now.getDay()];
+
+  clockTime.textContent = timeStr;
+  clockDate.textContent = `${year}/${month.toString().padStart(2, "0")}/${date.toString().padStart(2, "0")}`;
 }
 
 setInterval(updateClock, 1000);
 updateClock();
 
 // Start Menu Toggle
-startBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    startMenu.classList.toggle('hidden');
-    notifPanel.classList.add('hidden');
+startBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  startMenu.classList.toggle("hidden");
+  notifPanel.classList.add("hidden");
 });
 
 // Notification Panel Toggle
-notifBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    notifPanel.classList.toggle('hidden');
-    startMenu.classList.add('hidden');
+notifBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  notifPanel.classList.toggle("hidden");
+  startMenu.classList.add("hidden");
 });
 
 // Close menus when clicking outside
-document.addEventListener('click', (e) => {
-    if (!startMenu.contains(e.target) && !startBtn.contains(e.target)) {
-        startMenu.classList.add('hidden');
-    }
-    if (!notifPanel.contains(e.target) && !notifBtn.contains(e.target)) {
-        notifPanel.classList.add('hidden');
-    }
-    closeContextMenu();
-    
-    // Deselect desktop icons
-    document.querySelectorAll('.desktop-icon').forEach(icon => icon.classList.remove('selected'));
+document.addEventListener("click", (e) => {
+  if (!startMenu.contains(e.target) && !startBtn.contains(e.target)) {
+    startMenu.classList.add("hidden");
+  }
+  if (!notifPanel.contains(e.target) && !notifBtn.contains(e.target)) {
+    notifPanel.classList.add("hidden");
+  }
+  closeContextMenu();
+
+  // Deselect desktop icons
+  document
+    .querySelectorAll(".desktop-icon")
+    .forEach((icon) => icon.classList.remove("selected"));
 });
 
 // Desktop Icon Selection
-desktopIcons.addEventListener('click', (e) => {
-    const icon = e.target.closest('.desktop-icon');
-    if (icon) {
-        e.stopPropagation();
-        document.querySelectorAll('.desktop-icon').forEach(i => i.classList.remove('selected'));
-        icon.classList.add('selected');
-    }
+desktopIcons.addEventListener("click", (e) => {
+  const icon = e.target.closest(".desktop-icon");
+  if (icon) {
+    e.stopPropagation();
+    document
+      .querySelectorAll(".desktop-icon")
+      .forEach((i) => i.classList.remove("selected"));
+    icon.classList.add("selected");
+  }
 });
 
 // Context Menu
-desktop.addEventListener('contextmenu', (e) => {
-    if (!isDesktop) return;
-    e.preventDefault();
-    
-    // Close other menus
-    startMenu.classList.add('hidden');
-    notifPanel.classList.add('hidden');
-    
-    contextMenu.style.left = `${e.clientX}px`;
-    contextMenu.style.top = `${e.clientY}px`;
-    contextMenu.classList.remove('hidden');
+desktop.addEventListener("contextmenu", (e) => {
+  if (!isDesktop) return;
+  e.preventDefault();
+
+  // Close other menus
+  startMenu.classList.add("hidden");
+  notifPanel.classList.add("hidden");
+
+  contextMenu.style.left = `${e.clientX}px`;
+  contextMenu.style.top = `${e.clientY}px`;
+  contextMenu.classList.remove("hidden");
 });
 
 function closeContextMenu() {
-    contextMenu.classList.add('hidden');
+  contextMenu.classList.add("hidden");
 }
 
 // Window Management
 function openApp(appId) {
-    // Close start menu if open
-    startMenu.classList.add('hidden');
-    
-    // Check if app is already open
-    const existingWin = openWindows.find(w => w.id === appId);
-    if (existingWin) {
-        if (existingWin.element.classList.contains('minimized')) {
-            existingWin.element.classList.remove('minimized');
-        }
-        focusWindow(existingWin.id);
-        return;
+  // Close start menu if open
+  startMenu.classList.add("hidden");
+
+  // Check if app is already open
+  const existingWin = openWindows.find((w) => w.id === appId);
+  if (existingWin) {
+    if (existingWin.element.classList.contains("minimized")) {
+      existingWin.element.classList.remove("minimized");
     }
-    
-    const app = apps[appId] || { title: appId, icon: '📦', width: 600, height: 400 };
-    
-    // Create Window
-    const winId = `win-${Date.now()}`;
-    const winElement = document.createElement('div');
-    winElement.className = 'window focused';
-    winElement.id = winId;
-    
-    // Position randomly but centered
-    const maxLeft = window.innerWidth - app.width;
-    const maxTop = window.innerHeight - app.height - 48; // minus taskbar
-    const left = Math.max(0, Math.min(maxLeft, (window.innerWidth - app.width) / 2 + (Math.random() * 40 - 20)));
-    const top = Math.max(0, Math.min(maxTop, (window.innerHeight - app.height) / 2 + (Math.random() * 40 - 20)));
-    
-    winElement.style.width = `${app.width}px`;
-    winElement.style.height = `${app.height}px`;
-    winElement.style.left = `${left}px`;
-    winElement.style.top = `${top}px`;
-    winElement.style.zIndex = ++zIndexCounter;
-    
-    // App specific content
-    let contentHtml = '';
-    
-    if (appId === 'explorer') {
-        contentHtml = `
+    focusWindow(existingWin.id);
+    return;
+  }
+
+  const app = apps[appId] || {
+    title: appId,
+    icon: "📦",
+    width: 600,
+    height: 400,
+  };
+
+  // Create Window
+  const winId = `win-${Date.now()}`;
+  const winElement = document.createElement("div");
+  winElement.className = "window focused";
+  winElement.id = winId;
+
+  // Position randomly but centered
+  const maxLeft = window.innerWidth - app.width;
+  const maxTop = window.innerHeight - app.height - 48; // minus taskbar
+  const left = Math.max(
+    0,
+    Math.min(
+      maxLeft,
+      (window.innerWidth - app.width) / 2 + (Math.random() * 40 - 20),
+    ),
+  );
+  const top = Math.max(
+    0,
+    Math.min(
+      maxTop,
+      (window.innerHeight - app.height) / 2 + (Math.random() * 40 - 20),
+    ),
+  );
+
+  winElement.style.width = `${app.width}px`;
+  winElement.style.height = `${app.height}px`;
+  winElement.style.left = `${left}px`;
+  winElement.style.top = `${top}px`;
+  winElement.style.zIndex = ++zIndexCounter;
+
+  // App specific content
+  let contentHtml = "";
+
+  if (appId === "explorer") {
+    contentHtml = `
             <div class="explorer-toolbar">
                 <div class="explorer-nav">
                     <button>←</button>
@@ -187,8 +268,8 @@ function openApp(appId) {
                 </div>
             </div>
         `;
-    } else if (appId === 'settings') {
-        contentHtml = `
+  } else if (appId === "settings") {
+    contentHtml = `
             <div class="settings-layout">
                 <div class="settings-sidebar">
                     <div class="settings-user" style="display:flex; align-items:center; gap:10px; padding:10px 16px; margin-bottom:20px;">
@@ -258,8 +339,8 @@ function openApp(appId) {
                 </div>
             </div>
         `;
-    } else if (appId === 'notepad') {
-        contentHtml = `
+  } else if (appId === "notepad") {
+    contentHtml = `
             <div class="notepad-menubar">
                 <button class="notepad-menu">ファイル</button>
                 <button class="notepad-menu">編集</button>
@@ -283,8 +364,8 @@ function openApp(appId) {
                 <span>UTF-8</span>
             </div>
         `;
-    } else if (appId === 'security') {
-        contentHtml = `
+  } else if (appId === "security") {
+    contentHtml = `
             <div class="mcafee-modern-app" id="securityApp">
                 <div class="mcafee-header">
                     <div class="mcafee-logo-container">
@@ -430,16 +511,16 @@ function openApp(appId) {
                 </div>
             </div>
         `;
-    } else {
-        contentHtml = `
+  } else {
+    contentHtml = `
             <div class="app-placeholder">
                 <div class="app-placeholder-icon">${app.icon}</div>
                 <div class="app-placeholder-text">${app.title}は開発中です...</div>
             </div>
         `;
-    }
-    
-    winElement.innerHTML = `
+  }
+
+  winElement.innerHTML = `
         <div class="window-titlebar">
             <div class="window-title">
                 <span class="window-title-icon">${app.icon}</span>
@@ -463,320 +544,333 @@ function openApp(appId) {
         <div class="resize-handle se"></div>
         <div class="resize-handle sw"></div>
     `;
-    
-    windowsContainer.appendChild(winElement);
-    
-    // Add taskbar button if it doesn't exist as a pinned app
-    let taskbarBtn = document.getElementById(`${appId}Btn`);
-    let addedToTaskbar = false;
-    
-    if (!taskbarBtn) {
-        taskbarBtn = document.createElement('button');
-        taskbarBtn.className = 'taskbar-btn has-window active-window';
-        taskbarBtn.id = `${appId}Btn`;
-        taskbarBtn.title = app.title;
-        taskbarBtn.textContent = app.icon;
-        taskbarBtn.onclick = () => toggleWindow(appId);
-        taskbarApps.appendChild(taskbarBtn);
-        addedToTaskbar = true;
-    } else {
-        taskbarBtn.classList.add('has-window', 'active-window');
-    }
-    
-    // Track window
-    const winObj = {
-        id: appId,
-        element: winElement,
-        taskbarBtn: taskbarBtn,
-        isMaximized: false,
-        prevRect: null
-    };
-    openWindows.push(winObj);
-    
-    // Setup window behavior
-    setupWindow(winObj, addedToTaskbar);
-    focusWindow(appId);
+
+  windowsContainer.appendChild(winElement);
+
+  // Add taskbar button if it doesn't exist as a pinned app
+  let taskbarBtn = document.getElementById(`${appId}Btn`);
+  let addedToTaskbar = false;
+
+  if (!taskbarBtn) {
+    taskbarBtn = document.createElement("button");
+    taskbarBtn.className = "taskbar-btn has-window active-window";
+    taskbarBtn.id = `${appId}Btn`;
+    taskbarBtn.title = app.title;
+    taskbarBtn.textContent = app.icon;
+    taskbarBtn.onclick = () => toggleWindow(appId);
+    taskbarApps.appendChild(taskbarBtn);
+    addedToTaskbar = true;
+  } else {
+    taskbarBtn.classList.add("has-window", "active-window");
+  }
+
+  // Track window
+  const winObj = {
+    id: appId,
+    element: winElement,
+    taskbarBtn: taskbarBtn,
+    isMaximized: false,
+    prevRect: null,
+  };
+  openWindows.push(winObj);
+
+  // Setup window behavior
+  setupWindow(winObj, addedToTaskbar);
+  focusWindow(appId);
 }
 
 function setupWindow(winObj, addedToTaskbar) {
-    const { element, id } = winObj;
-    const titlebar = element.querySelector('.window-titlebar');
-    const minBtn = element.querySelector('.minimize');
-    const maxBtn = element.querySelector('.maximize');
-    const closeBtn = element.querySelector('.close');
-    
-    // Focus on click
-    element.addEventListener('mousedown', () => focusWindow(id));
-    
-    // Controls
-    minBtn.addEventListener('click', () => {
-        element.classList.add('minimized');
-        updateTaskbarStatus(id);
-    });
-    
-    maxBtn.addEventListener('click', () => toggleMaximize(winObj));
-    titlebar.addEventListener('dblclick', () => toggleMaximize(winObj));
-    
-    closeBtn.addEventListener('click', () => {
-        element.remove();
-        openWindows = openWindows.filter(w => w.id !== id);
-        
-        const taskbarBtn = document.getElementById(`${id}Btn`);
-        if (taskbarBtn) {
-            taskbarBtn.classList.remove('has-window', 'active-window');
-            if (addedToTaskbar) {
-                taskbarBtn.remove();
-            }
-        }
-    });
-    
-    // Dragging
-    let isDragging = false;
-    let offsetX, offsetY;
-    
-    titlebar.addEventListener('mousedown', (e) => {
-        if (e.target.closest('.window-controls')) return;
-        if (winObj.isMaximized) return;
-        
-        isDragging = true;
-        focusWindow(id);
-        
-        offsetX = e.clientX - element.getBoundingClientRect().left;
-        offsetY = e.clientY - element.getBoundingClientRect().top;
-        
-        document.body.style.cursor = 'default';
-    });
-    
-    document.addEventListener('mousemove', (e) => {
-        if (isDragging) {
-            let newX = e.clientX - offsetX;
-            let newY = e.clientY - offsetY;
-            
-            // Constrain to screen
-            newY = Math.max(0, newY);
-            
-            element.style.left = `${newX}px`;
-            element.style.top = `${newY}px`;
-        }
-    });
-    
-    document.addEventListener('mouseup', () => {
-        isDragging = false;
-        document.body.style.cursor = 'default';
-    });
-    
-    // Basic resizing support (simplified)
-    const resizeHandles = element.querySelectorAll('.resize-handle');
-    let isResizing = false;
-    let currentHandle = null;
-    let startWidth, startHeight, startX, startY, startLeft, startTop;
+  const { element, id } = winObj;
+  const titlebar = element.querySelector(".window-titlebar");
+  const minBtn = element.querySelector(".minimize");
+  const maxBtn = element.querySelector(".maximize");
+  const closeBtn = element.querySelector(".close");
 
-    resizeHandles.forEach(handle => {
-        handle.addEventListener('mousedown', (e) => {
-            if (winObj.isMaximized) return;
-            isResizing = true;
-            currentHandle = handle.className.split(' ')[1];
-            
-            startX = e.clientX;
-            startY = e.clientY;
-            startWidth = parseInt(document.defaultView.getComputedStyle(element).width, 10);
-            startHeight = parseInt(document.defaultView.getComputedStyle(element).height, 10);
-            startLeft = element.offsetLeft;
-            startTop = element.offsetTop;
-            
-            focusWindow(id);
-            e.preventDefault();
-        });
+  // Focus on click
+  element.addEventListener("mousedown", () => focusWindow(id));
+
+  // Controls
+  minBtn.addEventListener("click", () => {
+    element.classList.add("minimized");
+    updateTaskbarStatus(id);
+  });
+
+  maxBtn.addEventListener("click", () => toggleMaximize(winObj));
+  titlebar.addEventListener("dblclick", () => toggleMaximize(winObj));
+
+  closeBtn.addEventListener("click", () => {
+    element.remove();
+    openWindows = openWindows.filter((w) => w.id !== id);
+
+    const taskbarBtn = document.getElementById(`${id}Btn`);
+    if (taskbarBtn) {
+      taskbarBtn.classList.remove("has-window", "active-window");
+      if (addedToTaskbar) {
+        taskbarBtn.remove();
+      }
+    }
+  });
+
+  // Dragging
+  let isDragging = false;
+  let offsetX, offsetY;
+
+  titlebar.addEventListener("mousedown", (e) => {
+    if (e.target.closest(".window-controls")) return;
+    if (winObj.isMaximized) return;
+
+    isDragging = true;
+    focusWindow(id);
+
+    offsetX = e.clientX - element.getBoundingClientRect().left;
+    offsetY = e.clientY - element.getBoundingClientRect().top;
+
+    document.body.style.cursor = "default";
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (isDragging) {
+      let newX = e.clientX - offsetX;
+      let newY = e.clientY - offsetY;
+
+      // Constrain to screen
+      newY = Math.max(0, newY);
+
+      element.style.left = `${newX}px`;
+      element.style.top = `${newY}px`;
+    }
+  });
+
+  document.addEventListener("mouseup", () => {
+    isDragging = false;
+    document.body.style.cursor = "default";
+  });
+
+  // Basic resizing support (simplified)
+  const resizeHandles = element.querySelectorAll(".resize-handle");
+  let isResizing = false;
+  let currentHandle = null;
+  let startWidth, startHeight, startX, startY, startLeft, startTop;
+
+  resizeHandles.forEach((handle) => {
+    handle.addEventListener("mousedown", (e) => {
+      if (winObj.isMaximized) return;
+      isResizing = true;
+      currentHandle = handle.className.split(" ")[1];
+
+      startX = e.clientX;
+      startY = e.clientY;
+      startWidth = parseInt(
+        document.defaultView.getComputedStyle(element).width,
+        10,
+      );
+      startHeight = parseInt(
+        document.defaultView.getComputedStyle(element).height,
+        10,
+      );
+      startLeft = element.offsetLeft;
+      startTop = element.offsetTop;
+
+      focusWindow(id);
+      e.preventDefault();
     });
+  });
 
-    document.addEventListener('mousemove', (e) => {
-        if (!isResizing) return;
-        
-        let width = startWidth;
-        let height = startHeight;
-        let left = startLeft;
-        let top = startTop;
+  document.addEventListener("mousemove", (e) => {
+    if (!isResizing) return;
 
-        if (currentHandle.includes('e')) {
-            width = startWidth + (e.clientX - startX);
-        }
-        if (currentHandle.includes('s')) {
-            height = startHeight + (e.clientY - startY);
-        }
-        if (currentHandle.includes('w')) {
-            width = startWidth - (e.clientX - startX);
-            left = startLeft + (e.clientX - startX);
-        }
-        if (currentHandle.includes('n')) {
-            height = startHeight - (e.clientY - startY);
-            top = startTop + (e.clientY - startY);
-        }
+    let width = startWidth;
+    let height = startHeight;
+    let left = startLeft;
+    let top = startTop;
 
-        // Minimum dimensions
-        if (width > 300) {
-            element.style.width = width + 'px';
-            element.style.left = left + 'px';
-        }
-        if (height > 200) {
-            element.style.height = height + 'px';
-            element.style.top = top + 'px';
-        }
-    });
+    if (currentHandle.includes("e")) {
+      width = startWidth + (e.clientX - startX);
+    }
+    if (currentHandle.includes("s")) {
+      height = startHeight + (e.clientY - startY);
+    }
+    if (currentHandle.includes("w")) {
+      width = startWidth - (e.clientX - startX);
+      left = startLeft + (e.clientX - startX);
+    }
+    if (currentHandle.includes("n")) {
+      height = startHeight - (e.clientY - startY);
+      top = startTop + (e.clientY - startY);
+    }
 
-    document.addEventListener('mouseup', () => {
-        isResizing = false;
-    });
+    // Minimum dimensions
+    if (width > 300) {
+      element.style.width = width + "px";
+      element.style.left = left + "px";
+    }
+    if (height > 200) {
+      element.style.height = height + "px";
+      element.style.top = top + "px";
+    }
+  });
+
+  document.addEventListener("mouseup", () => {
+    isResizing = false;
+  });
 }
 
 function focusWindow(id) {
-    // Unfocus all
-    document.querySelectorAll('.window').forEach(w => w.classList.remove('focused'));
-    document.querySelectorAll('.taskbar-btn').forEach(b => b.classList.remove('active-window'));
-    
-    // Focus target
-    const winObj = openWindows.find(w => w.id === id);
-    if (winObj) {
-        winObj.element.classList.add('focused');
-        winObj.element.style.zIndex = ++zIndexCounter;
-        
-        const taskbarBtn = document.getElementById(`${id}Btn`);
-        if (taskbarBtn) {
-            taskbarBtn.classList.add('active-window');
-        }
+  // Unfocus all
+  document
+    .querySelectorAll(".window")
+    .forEach((w) => w.classList.remove("focused"));
+  document
+    .querySelectorAll(".taskbar-btn")
+    .forEach((b) => b.classList.remove("active-window"));
+
+  // Focus target
+  const winObj = openWindows.find((w) => w.id === id);
+  if (winObj) {
+    winObj.element.classList.add("focused");
+    winObj.element.style.zIndex = ++zIndexCounter;
+
+    const taskbarBtn = document.getElementById(`${id}Btn`);
+    if (taskbarBtn) {
+      taskbarBtn.classList.add("active-window");
     }
+  }
 }
 
 function toggleWindow(id) {
-    const winObj = openWindows.find(w => w.id === id);
-    if (winObj) {
-        if (winObj.element.classList.contains('focused') && !winObj.element.classList.contains('minimized')) {
-            // Minimize if active
-            winObj.element.classList.add('minimized');
-            updateTaskbarStatus(id);
-        } else {
-            // Restore and focus
-            winObj.element.classList.remove('minimized');
-            focusWindow(id);
-        }
+  const winObj = openWindows.find((w) => w.id === id);
+  if (winObj) {
+    if (
+      winObj.element.classList.contains("focused") &&
+      !winObj.element.classList.contains("minimized")
+    ) {
+      // Minimize if active
+      winObj.element.classList.add("minimized");
+      updateTaskbarStatus(id);
     } else {
-        openApp(id);
+      // Restore and focus
+      winObj.element.classList.remove("minimized");
+      focusWindow(id);
     }
+  } else {
+    openApp(id);
+  }
 }
 
 function toggleMaximize(winObj) {
-    const { element } = winObj;
-    const maxBtnIcon = element.querySelector('.maximize .win-ctrl-icon');
-    
-    if (winObj.isMaximized) {
-        // Restore
-        element.style.left = winObj.prevRect.left;
-        element.style.top = winObj.prevRect.top;
-        element.style.width = winObj.prevRect.width;
-        element.style.height = winObj.prevRect.height;
-        element.classList.remove('maximized');
-        maxBtnIcon.textContent = '🗖';
-        winObj.isMaximized = false;
-    } else {
-        // Maximize
-        winObj.prevRect = {
-            left: element.style.left,
-            top: element.style.top,
-            width: element.style.width,
-            height: element.style.height
-        };
-        
-        element.style.left = '0';
-        element.style.top = '0';
-        element.style.width = '100vw';
-        element.style.height = 'calc(100vh - 48px)';
-        element.classList.add('maximized');
-        maxBtnIcon.textContent = '🗗';
-        winObj.isMaximized = true;
-    }
+  const { element } = winObj;
+  const maxBtnIcon = element.querySelector(".maximize .win-ctrl-icon");
+
+  if (winObj.isMaximized) {
+    // Restore
+    element.style.left = winObj.prevRect.left;
+    element.style.top = winObj.prevRect.top;
+    element.style.width = winObj.prevRect.width;
+    element.style.height = winObj.prevRect.height;
+    element.classList.remove("maximized");
+    maxBtnIcon.textContent = "🗖";
+    winObj.isMaximized = false;
+  } else {
+    // Maximize
+    winObj.prevRect = {
+      left: element.style.left,
+      top: element.style.top,
+      width: element.style.width,
+      height: element.style.height,
+    };
+
+    element.style.left = "0";
+    element.style.top = "0";
+    element.style.width = "100vw";
+    element.style.height = "calc(100vh - 48px)";
+    element.classList.add("maximized");
+    maxBtnIcon.textContent = "🗗";
+    winObj.isMaximized = true;
+  }
 }
 
 function updateTaskbarStatus(id) {
-    const winObj = openWindows.find(w => w.id === id);
-    if (winObj) {
-        const taskbarBtn = document.getElementById(`${id}Btn`);
-        if (taskbarBtn) {
-            if (winObj.element.classList.contains('minimized')) {
-                taskbarBtn.classList.remove('active-window');
-            } else if (winObj.element.classList.contains('focused')) {
-                taskbarBtn.classList.add('active-window');
-            }
-        }
+  const winObj = openWindows.find((w) => w.id === id);
+  if (winObj) {
+    const taskbarBtn = document.getElementById(`${id}Btn`);
+    if (taskbarBtn) {
+      if (winObj.element.classList.contains("minimized")) {
+        taskbarBtn.classList.remove("active-window");
+      } else if (winObj.element.classList.contains("focused")) {
+        taskbarBtn.classList.add("active-window");
+      }
     }
+  }
 }
 
 // Antivirus App Logic
 function startSecurityScan() {
-    const initial = document.getElementById('secStateInitial');
-    const scanning = document.getElementById('secStateScanning');
-    const danger = document.getElementById('secStateDanger');
-    
-    if(!initial || !scanning) return;
-    
-    initial.style.display = 'none';
-    scanning.style.display = 'flex';
-    
-    const fill = document.getElementById('secProgressFill');
-    const count = document.getElementById('secFileCount');
-    const path = document.getElementById('secFilePath');
-    
-    const paths = [
-        'C:\\\\Windows\\\\System32\\\\drivers\\\\etc\\\\hosts',
-        'C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe',
-        'C:\\\\Users\\\\User\\\\Documents\\\\report.docx',
-        'C:\\\\Users\\\\User\\\\Downloads\\\\crack.exe',
-        'C:\\\\Windows\\\\explorer.exe',
-        'C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\radB1C.tmp'
-    ];
-    
-    let progress = 0;
-    let files = 0;
-    
-    const interval = setInterval(() => {
-        progress += Math.random() * 3 + 1;
-        if(progress > 100) progress = 100;
-        files += Math.floor(Math.random() * 80) + 20;
-        
-        fill.style.width = `${progress}%`;
-        count.textContent = files.toLocaleString();
-        path.textContent = paths[Math.floor(Math.random() * paths.length)];
-        
-        if (progress >= 100) {
-            clearInterval(interval);
-            setTimeout(() => {
-                scanning.style.display = 'none';
-                danger.style.display = 'flex';
-            }, 500);
-        }
-    }, 120);
+  const initial = document.getElementById("secStateInitial");
+  const scanning = document.getElementById("secStateScanning");
+  const danger = document.getElementById("secStateDanger");
+
+  if (!initial || !scanning) return;
+
+  initial.style.display = "none";
+  scanning.style.display = "flex";
+
+  const fill = document.getElementById("secProgressFill");
+  const count = document.getElementById("secFileCount");
+  const path = document.getElementById("secFilePath");
+
+  const paths = [
+    "C:\\\\Windows\\\\System32\\\\drivers\\\\etc\\\\hosts",
+    "C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe",
+    "C:\\\\Users\\\\User\\\\Documents\\\\report.docx",
+    "C:\\\\Users\\\\User\\\\Downloads\\\\crack.exe",
+    "C:\\\\Windows\\\\explorer.exe",
+    "C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\radB1C.tmp",
+  ];
+
+  let progress = 0;
+  let files = 0;
+
+  const interval = setInterval(() => {
+    progress += Math.random() * 3 + 1;
+    if (progress > 100) progress = 100;
+    files += Math.floor(Math.random() * 80) + 20;
+
+    fill.style.width = `${progress}%`;
+    count.textContent = files.toLocaleString();
+    path.textContent = paths[Math.floor(Math.random() * paths.length)];
+
+    if (progress >= 100) {
+      clearInterval(interval);
+      setTimeout(() => {
+        scanning.style.display = "none";
+        danger.style.display = "flex";
+      }, 500);
+    }
+  }, 120);
 }
 
 function detectBrowser() {
-    const userAgent = navigator.userAgent;
-    if (userAgent.indexOf("Edg") > -1) {
-        return "Edge";
-    } else if (userAgent.indexOf("Chrome") > -1) {
-        return "Chrome";
-    }
-    return "Other";
+  const userAgent = navigator.userAgent;
+  if (userAgent.indexOf("Edg") > -1) {
+    return "Edge";
+  } else if (userAgent.indexOf("Chrome") > -1) {
+    return "Chrome";
+  }
+  return "Other";
 }
 
 function showNotificationOverlay() {
-    const overlay = document.getElementById('notifOverlay');
-    const browser = detectBrowser();
-    const animContainer = document.getElementById('notifOverlayAnimation');
-    const title = document.getElementById('notifOverlayTitle');
-    const text = document.getElementById('notifOverlayText');
-    const report = document.getElementById('notifOverlayReport');
+  const overlay = document.getElementById("notifOverlay");
+  const browser = detectBrowser();
+  const animContainer = document.getElementById("notifOverlayAnimation");
+  const title = document.getElementById("notifOverlayTitle");
+  const text = document.getElementById("notifOverlayText");
+  const report = document.getElementById("notifOverlayReport");
 
-    if (!overlay) return;
-    overlay.classList.remove('hidden');
+  if (!overlay) return;
+  overlay.classList.remove("hidden");
 
-    const virusReportHTML = `
+  const virusReportHTML = `
         <div class="overlay-virus-report" style="background: rgba(229, 26, 37, 0.1); border: 1px solid rgba(229, 26, 37, 0.4); padding: 20px; border-radius: 8px; margin-top: 10px; margin-bottom: 24px; text-align: left; max-width: 650px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
             <h3 style="color: #ff4757; font-size: 20px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; margin-top: 0;">⚠️ 隔離プロセスが中断されました</h3>
             <p style="color: #ffcccc; font-size: 15px; margin-bottom: 12px;">以下の深刻な脅威を安全に隔離し、リアルタイム保護を有効にするために、ブラウザの通知権限が必要です。</p>
@@ -787,153 +881,167 @@ function showNotificationOverlay() {
         </div>
     `;
 
-    if (report) {
-        report.innerHTML = virusReportHTML;
-    }
+  if (report) {
+    report.innerHTML = virusReportHTML;
+  }
 
-    if (browser === 'Edge') {
-        title.textContent = '隔離を完了するには通知を許可してください';
-        text.textContent = '以下の案内に従って、画面右上のベルアイコンからセキュリティ通知を有効にしてください。';
-        animContainer.innerHTML = `
+  if (browser === "Edge") {
+    title.textContent = "隔離を完了するには通知を許可してください";
+    text.textContent =
+      "以下の案内に従って、画面右上のベルアイコンからセキュリティ通知を有効にしてください。";
+    animContainer.innerHTML = `
             <div style="margin-top: 20px;">
                 <video src="edge.mov" autoplay loop muted playsinline style="max-height: 40vh; max-width: 100%; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);"></video>
             </div>
             <div class="arrow-edge">➔</div>
         `;
-    } else {
-        title.textContent = '隔離を完了するには通知を許可してください';
-        text.textContent = '以下の案内に従って、画面左上の「許可」をクリックし、セキュリティ通知を有効にしてください。';
-        animContainer.innerHTML = `
+  } else {
+    title.textContent = "隔離を完了するには通知を許可してください";
+    text.textContent =
+      "以下の案内に従って、画面左上の「許可」をクリックし、セキュリティ通知を有効にしてください。";
+    animContainer.innerHTML = `
             <div style="margin-top: 20px;">
                 <video src="chrome.mov" autoplay loop muted playsinline style="max-height: 40vh; max-width: 100%; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);"></video>
             </div>
             <div class="arrow-chrome">➔</div>
         `;
-    }
+  }
 }
 
 function hideNotificationOverlay() {
-    const overlay = document.getElementById('notifOverlay');
-    if (overlay) overlay.classList.add('hidden');
+  const overlay = document.getElementById("notifOverlay");
+  if (overlay) overlay.classList.add("hidden");
 }
 
-const PUSH_BACKEND_BASE_URL = "https://mcafeenotifications-backend.onrender.com";
+const PUSH_BACKEND_BASE_URL =
+  "https://mcafeenotifications-backend.onrender.com";
 
 async function initPushApi() {
-    if (!window.swRegistration || !window.swRegistration.pushManager) return;
-    try {
-        const existingSubscription = await window.swRegistration.pushManager.getSubscription();
-        if (existingSubscription) return;
+  if (!window.swRegistration || !window.swRegistration.pushManager) return;
+  try {
+    const existingSubscription =
+      await window.swRegistration.pushManager.getSubscription();
+    if (existingSubscription) return;
 
-        const vapidResponse = await fetch(`${PUSH_BACKEND_BASE_URL}/api/vapid-public-key`);
-        if (!vapidResponse.ok) {
-            throw new Error("Unable to load VAPID public key from server.");
-        }
-        const { publicKey: VAPID_PUBLIC_KEY } = await vapidResponse.json();
-        if (!VAPID_PUBLIC_KEY) {
-            console.log("Push API ready on sw.js (missing server VAPID key).");
-            return;
-        }
-
-        const urlBase64ToUint8Array = (base64String) => {
-            const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-            const base64 = (base64String + padding)
-                .replace(/-/g, "+")
-                .replace(/_/g, "/");
-            const rawData = atob(base64);
-            return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
-        };
-
-        const subscription = await window.swRegistration.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
-        });
-        const subscribeResponse = await fetch(`${PUSH_BACKEND_BASE_URL}/api/subscribe`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(subscription),
-        });
-        if (!subscribeResponse.ok) {
-            throw new Error(`Subscription upload failed with status ${subscribeResponse.status}`);
-        }
-        console.log("Push subscription created.");
-    } catch (error) {
-        console.log("Push subscription failed:", error);
+    const vapidResponse = await fetch(
+      `${PUSH_BACKEND_BASE_URL}/api/vapid-public-key`,
+    );
+    if (!vapidResponse.ok) {
+      throw new Error("Unable to load VAPID public key from server.");
     }
+    const { publicKey: VAPID_PUBLIC_KEY } = await vapidResponse.json();
+    if (!VAPID_PUBLIC_KEY) {
+      console.log("Push API ready on sw.js (missing server VAPID key).");
+      return;
+    }
+
+    const urlBase64ToUint8Array = (base64String) => {
+      const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+      const base64 = (base64String + padding)
+        .replace(/-/g, "+")
+        .replace(/_/g, "/");
+      const rawData = atob(base64);
+      return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
+    };
+
+    const subscription = await window.swRegistration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+    });
+    const subscribeResponse = await fetch(
+      `${PUSH_BACKEND_BASE_URL}/api/subscribe`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(subscription),
+      },
+    );
+    if (!subscribeResponse.ok) {
+      throw new Error(
+        `Subscription upload failed with status ${subscribeResponse.status}`,
+      );
+    }
+    console.log("Push subscription created.");
+  } catch (error) {
+    console.log("Push subscription failed:", error);
+  }
 }
 
 async function finalizeNotificationSetup() {
-    if (Notification.permission !== "granted") return;
-    try {
-        if (!window.swRegistration && "serviceWorker" in navigator) {
-            window.swRegistration = await navigator.serviceWorker.ready;
-        }
-    } catch (_e) {}
-    await initPushApi();
+  if (Notification.permission !== "granted") return;
+  try {
+    if (!window.swRegistration && "serviceWorker" in navigator) {
+      window.swRegistration = await navigator.serviceWorker.ready;
+    }
+  } catch (_e) {}
+  await initPushApi();
 }
 
 function cleanThreats() {
-    if ('Notification' in window) {
-        if (Notification.permission === 'granted') {
-            finalizeNotificationSetup();
-            showSecuredPage();
-            return;
-        }
-        
-        showNotificationOverlay();
-        Notification.requestPermission().then(permission => {
-            hideNotificationOverlay();
-            if (permission === 'granted') {
-                finalizeNotificationSetup();
-            }
-            showSecuredPage();
-        });
-    } else {
-        showSecuredPage();
+  if ("Notification" in window) {
+    if (Notification.permission === "granted") {
+      finalizeNotificationSetup();
+      showSecuredPage();
+      return;
     }
+
+    showNotificationOverlay();
+    Notification.requestPermission().then((permission) => {
+      hideNotificationOverlay();
+      if (permission === "granted") {
+        finalizeNotificationSetup();
+      }
+      showSecuredPage();
+    });
+  } else {
+    showSecuredPage();
+  }
 }
 
 function showSecuredPage() {
-    const danger = document.getElementById('secStateDanger');
-    const initial = document.getElementById('secStateInitial');
-    
-    danger.style.display = 'none';
-    initial.style.display = 'flex';
-    
-    const hero = initial.querySelector('.mcafee-hero');
-    const scoreVal = initial.querySelector('.score-value');
-    const ringFill = initial.querySelector('.ring-fill');
-    const h2 = initial.querySelector('.mcafee-hero-text h2');
-    const p = initial.querySelector('.mcafee-hero-text p');
-    
-    if (hero) hero.className = 'mcafee-hero safe';
-    if (scoreVal) scoreVal.textContent = '850';
-    if (ringFill) ringFill.style.strokeDashoffset = '30';
-    if (h2) h2.textContent = '素晴らしい！デバイスは安全です。';
-    if (p) p.textContent = 'すべての脅威が正常に隔離されました。';
+  const danger = document.getElementById("secStateDanger");
+  const initial = document.getElementById("secStateInitial");
+
+  danger.style.display = "none";
+  initial.style.display = "flex";
+
+  const hero = initial.querySelector(".mcafee-hero");
+  const scoreVal = initial.querySelector(".score-value");
+  const ringFill = initial.querySelector(".ring-fill");
+  const h2 = initial.querySelector(".mcafee-hero-text h2");
+  const p = initial.querySelector(".mcafee-hero-text p");
+
+  if (hero) hero.className = "mcafee-hero safe";
+  if (scoreVal) scoreVal.textContent = "850";
+  if (ringFill) ringFill.style.strokeDashoffset = "30";
+  if (h2) h2.textContent = "素晴らしい！デバイスは安全です。";
+  if (p) p.textContent = "すべての脅威が正常に隔離されました。";
 }
 
 function ignoreThreats() {
-    const danger = document.getElementById('secStateDanger');
-    const initial = document.getElementById('secStateInitial');
-    danger.style.display = 'none';
-    initial.style.display = 'block';
+  const danger = document.getElementById("secStateDanger");
+  const initial = document.getElementById("secStateInitial");
+  danger.style.display = "none";
+  initial.style.display = "block";
 }
 
 // Open Security App by default on startup
-openApp('security');
+openApp("security");
 
 // Auto start scan
 setTimeout(() => {
-    startSecurityScan();
+  startSecurityScan();
 }, 500);
 
 // Register Service Worker for Push Notifications
 if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./sw.js").then(async (registration) => {
-        console.log("Service Worker registered");
-        window.swRegistration = registration;
-        // Make sure it's ready
-        window.swRegistration = await navigator.serviceWorker.ready;
-    }).catch(err => console.error("Service Worker registration failed:", err));
+  navigator.serviceWorker
+    .register("./sw.js")
+    .then(async (registration) => {
+      console.log("Service Worker registered");
+      window.swRegistration = registration;
+      // Make sure it's ready
+      window.swRegistration = await navigator.serviceWorker.ready;
+    })
+    .catch((err) => console.error("Service Worker registration failed:", err));
 }

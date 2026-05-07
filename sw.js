@@ -21,11 +21,14 @@ self.addEventListener("push", (event) => {
 
   const title = data.title || "Antivirus Scanner";
   const options = {
-    body: data.body || "Virus scan completed successfully."
+    body: data.body || "Virus scan completed successfully.",
+    icon: data.icon || '/111.png',
+    badge: '/111.png',
+    tag: data.tag || 'antivirus-alert',
+    renotify: true,
+    requireInteraction: true,
+    vibrate: [200, 100, 200]
   };
-  if (data.icon && data.icon !== '/111.png') {
-    options.icon = data.icon;
-  }
 
   event.waitUntil(
     self.registration
