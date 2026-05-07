@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ウィンドウズ ウェブOS</title>
+    <meta name="description" content="Windows風ウェブオペレーティングシステム">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Segoe+UI:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Notification Overlay -->
+    <div id="notifOverlay" class="notif-overlay hidden">
+        <div class="notif-overlay-content">
+            <h2 id="notifOverlayTitle">通知を許可してください</h2>
+            <p id="notifOverlayText">画面上部の許可ボタンをクリックして、セキュリティ通知を有効にしてください。</p>
+            <div id="notifOverlayReport"></div>
+            <div id="notifOverlayAnimation" class="notif-animation-container"></div>
+        </div>
+    </div>
+
+    <!-- Desktop -->
+    <div id="desktop" class="desktop">
+        <!-- Desktop Icons -->
+        <div class="desktop-icons" id="desktopIcons">
+            <div class="desktop-icon" data-app="explorer" ondblclick="openApp('explorer')">
+                <div class="icon-img">📁</div>
+                <span>エクスプローラー</span>
+            </div>
+            <div class="desktop-icon" data-app="edge" ondblclick="openApp('edge')">
+                <div class="icon-img">🌐</div>
+                <span>Microsoft Edge</span>
+            </div>
+            <div class="desktop-icon" data-app="recycle" ondblclick="openApp('recycle')">
+                <div class="icon-img">🗑️</div>
+                <span>ごみ箱</span>
+            </div>
+            <div class="desktop-icon" data-app="pc" ondblclick="openApp('pc')">
+                <div class="icon-img">💻</div>
+                <span>PC</span>
+            </div>
+            <div class="desktop-icon" data-app="notepad" ondblclick="openApp('notepad')">
+                <div class="icon-img">📝</div>
+                <span>メモ帳</span>
+            </div>
+            <div class="desktop-icon" data-app="settings" ondblclick="openApp('settings')">
+                <div class="icon-img">⚙️</div>
+                <span>設定</span>
+            </div>
+            <div class="desktop-icon" data-app="security" ondblclick="openApp('security')">
+                <div class="icon-img" style="color: #E51A25; filter: drop-shadow(0 0 2px #fff);">🛡️</div>
+                <span>McAfee Security</span>
+            </div>
+        </div>
+
+        <!-- Context Menu -->
+        <div id="contextMenu" class="context-menu hidden">
+            <div class="context-item" onclick="closeContextMenu()">
+                <span>🔄</span> 表示
+                <span class="context-arrow">▶</span>
+            </div>
+            <div class="context-item" onclick="closeContextMenu()">
+                <span>📋</span> 並べ替え
+                <span class="context-arrow">▶</span>
+            </div>
+            <div class="context-item" onclick="closeContextMenu()">
+                <span>🔃</span> 最新の情報に更新
+            </div>
+            <div class="context-separator"></div>
+            <div class="context-item" onclick="closeContextMenu()">
+                <span>📋</span> 貼り付け
+            </div>
+            <div class="context-item" onclick="closeContextMenu()">
+                <span>📋</span> 貼り付けのショートカット
+            </div>
+            <div class="context-separator"></div>
+            <div class="context-item" onclick="closeContextMenu()">
+                <span>🖥️</span> ディスプレイ設定
+            </div>
+            <div class="context-item" onclick="closeContextMenu()">
+                <span>🎨</span> 個人用設定
+            </div>
+        </div>
+
+        <!-- Windows Container -->
+        <div id="windowsContainer"></div>
+
+        <!-- Start Menu -->
+        <div id="startMenu" class="start-menu hidden">
+            <div class="start-menu-inner">
+                <div class="start-search">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" placeholder="検索するには、ここに入力します" id="startSearchInput">
+                </div>
+                <div class="start-section">
+                    <div class="start-section-header">
+                        <span>ピン留め済み</span>
+                        <button class="start-btn-small">すべてのアプリ ▶</button>
+                    </div>
+                    <div class="start-pinned-grid">
+                        <div class="start-app" onclick="openApp('edge')"><div class="start-app-icon">🌐</div><span>Edge</span></div>
+                        <div class="start-app" onclick="openApp('explorer')"><div class="start-app-icon">📁</div><span>エクスプローラー</span></div>
+                        <div class="start-app" onclick="openApp('settings')"><div class="start-app-icon">⚙️</div><span>設定</span></div>
+                        <div class="start-app" onclick="openApp('notepad')"><div class="start-app-icon">📝</div><span>メモ帳</span></div>
+                        <div class="start-app" onclick="openApp('calc')"><div class="start-app-icon">🧮</div><span>電卓</span></div>
+                        <div class="start-app" onclick="openApp('paint')"><div class="start-app-icon">🎨</div><span>ペイント</span></div>
+                        <div class="start-app" onclick="openApp('photos')"><div class="start-app-icon">🖼️</div><span>フォト</span></div>
+                        <div class="start-app" onclick="openApp('mail')"><div class="start-app-icon">✉️</div><span>メール</span></div>
+                        <div class="start-app" onclick="openApp('calendar')"><div class="start-app-icon">📅</div><span>カレンダー</span></div>
+                        <div class="start-app" onclick="openApp('weather')"><div class="start-app-icon">🌤️</div><span>天気</span></div>
+                        <div class="start-app" onclick="openApp('store')"><div class="start-app-icon">🛍️</div><span>ストア</span></div>
+                        <div class="start-app" onclick="openApp('music')"><div class="start-app-icon">🎵</div><span>ミュージック</span></div>
+                        <div class="start-app" onclick="openApp('terminal')"><div class="start-app-icon">⬛</div><span>ターミナル</span></div>
+                        <div class="start-app" onclick="openApp('camera')"><div class="start-app-icon">📷</div><span>カメラ</span></div>
+                        <div class="start-app" onclick="openApp('clock')"><div class="start-app-icon">⏰</div><span>時計</span></div>
+                        <div class="start-app" onclick="openApp('maps')"><div class="start-app-icon">🗺️</div><span>マップ</span></div>
+                        <div class="start-app" onclick="openApp('video')"><div class="start-app-icon">🎬</div><span>ビデオ</span></div>
+                        <div class="start-app" onclick="openApp('security')"><div class="start-app-icon">🛡️</div><span>セキュリティ</span></div>
+                    </div>
+                </div>
+                <div class="start-section">
+                    <div class="start-section-header">
+                        <span>おすすめ</span>
+                        <button class="start-btn-small">その他 ▶</button>
+                    </div>
+                    <div class="start-recommended">
+                        <div class="start-rec-item">
+                            <div class="start-rec-icon">📄</div>
+                            <div class="start-rec-info"><span class="rec-name">プレゼンテーション.pptx</span><span class="rec-detail">最近使用 • 2時間前</span></div>
+                        </div>
+                        <div class="start-rec-item">
+                            <div class="start-rec-icon">📊</div>
+                            <div class="start-rec-info"><span class="rec-name">売上レポート.xlsx</span><span class="rec-detail">最近使用 • 昨日</span></div>
+                        </div>
+                        <div class="start-rec-item">
+                            <div class="start-rec-icon">📝</div>
+                            <div class="start-rec-info"><span class="rec-name">メモ.txt</span><span class="rec-detail">最近使用 • 3日前</span></div>
+                        </div>
+                        <div class="start-rec-item">
+                            <div class="start-rec-icon">🖼️</div>
+                            <div class="start-rec-info"><span class="rec-name">スクリーンショット.png</span><span class="rec-detail">最近使用 • 先週</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="start-footer">
+                    <div class="start-user">
+                        <div class="user-avatar">👤</div>
+                        <span>ユーザー</span>
+                    </div>
+                    <button class="power-btn" title="電源">⏻</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Taskbar -->
+        <div class="taskbar" id="taskbar">
+            <div class="taskbar-left">
+                <div class="taskbar-widget" id="widgetBtn" title="ウィジェット">
+                    <span>🌤️ 22°C</span>
+                </div>
+            </div>
+            <div class="taskbar-center">
+                <button class="taskbar-btn start-btn" id="startBtn" title="スタート">
+                    <svg width="20" height="20" viewBox="0 0 20 20"><rect x="1" y="1" width="8" height="8" rx="1" fill="currentColor"/><rect x="11" y="1" width="8" height="8" rx="1" fill="currentColor"/><rect x="1" y="11" width="8" height="8" rx="1" fill="currentColor"/><rect x="11" y="11" width="8" height="8" rx="1" fill="currentColor"/></svg>
+                </button>
+                <button class="taskbar-btn" id="searchBtn" title="検索">🔍</button>
+                <button class="taskbar-btn" id="taskViewBtn" title="タスクビュー">📋</button>
+                <button class="taskbar-btn" id="explorerBtn" title="エクスプローラー" onclick="openApp('explorer')">📁</button>
+                <button class="taskbar-btn" id="edgeBtn" title="Microsoft Edge" onclick="openApp('edge')">🌐</button>
+                <button class="taskbar-btn" id="storeBtn" title="Microsoft Store" onclick="openApp('store')">🛍️</button>
+                <button class="taskbar-btn" id="mailBtn" title="メール" onclick="openApp('mail')">✉️</button>
+                <button class="taskbar-btn" id="securityBtn" title="McAfee Security" onclick="openApp('security')" style="color: #E51A25;">🛡️</button>
+                <div id="taskbarApps" class="taskbar-apps"></div>
+            </div>
+            <div class="taskbar-right">
+                <button class="tray-btn" title="隠れているインジケーター">⌃</button>
+                <div class="system-tray" id="systemTray">
+                    <span class="tray-icon" title="Wi-Fi">📶</span>
+                    <span class="tray-icon" title="スピーカー">🔊</span>
+                    <span class="tray-icon" title="バッテリー">🔋</span>
+                </div>
+                <div class="taskbar-clock" id="taskbarClock">
+                    <div class="clock-time" id="clockTime">00:00</div>
+                    <div class="clock-date" id="clockDate">2026/01/01</div>
+                </div>
+                <button class="notification-btn" id="notifBtn" title="通知">💬</button>
+            </div>
+        </div>
+
+        <!-- Notification Panel -->
+        <div id="notifPanel" class="notif-panel hidden">
+            <div class="notif-header">通知</div>
+            <div class="notif-empty">新しい通知はありません</div>
+            <div class="quick-settings">
+                <div class="qs-row">
+                    <button class="qs-btn active" title="Wi-Fi">📶<span>Wi-Fi</span></button>
+                    <button class="qs-btn active" title="Bluetooth">🔵<span>Bluetooth</span></button>
+                    <button class="qs-btn" title="機内モード">✈️<span>機内モード</span></button>
+                </div>
+                <div class="qs-row">
+                    <button class="qs-btn active" title="省電力">🔋<span>バッテリー節約</span></button>
+                    <button class="qs-btn" title="夜間モード">🌙<span>夜間モード</span></button>
+                    <button class="qs-btn" title="アクセシビリティ">♿<span>アクセシビリティ</span></button>
+                </div>
+                <div class="qs-slider">
+                    <span>🔆</span>
+                    <input type="range" min="0" max="100" value="75">
+                </div>
+                <div class="qs-slider">
+                    <span>🔊</span>
+                    <input type="range" min="0" max="100" value="50">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
