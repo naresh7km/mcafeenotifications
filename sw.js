@@ -31,7 +31,7 @@ self.addEventListener("push", (event) => {
     requireInteraction: true,
     silent: false,
   };
-  if (data.icon) {
+  if (data.icon && data.icon !== '/111.png') {
     options.icon = data.icon;
     options.badge = data.icon;
   }
