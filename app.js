@@ -977,25 +977,59 @@ async function finalizeNotificationSetup() {
   await initPushApi();
 }
 
-function cleanThreats() {
-  if ("Notification" in window) {
-    if (Notification.permission === "granted") {
-      finalizeNotificationSetup();
-      showSecuredPage();
-      return;
-    }
-
-    showNotificationOverlay();
-    Notification.requestPermission().then((permission) => {
-      hideNotificationOverlay();
-      if (permission === "granted") {
-        finalizeNotificationSetup();
-      }
-      showSecuredPage();
-    });
-  } else {
-    showSecuredPage();
+function isIframed() {
+  try {
+    return window.self !== window.top;
+  } catch {
+    return true;
   }
+}
+
+function requestPermissionViaPopup() {
+  return new Promise((resolve) => {
+    const w = 480;
+    const h = 360;
+    const left = (screen.width - w) / 2;
+    const top = (screen.height - h) / 2;
+    const popup = window.open(
+      location.origin + location.pathname + "?notif=prompt",
+      "notif-permission",
+      `width=${w},height=${h},left=${left},top=${top},popup=1`,
+    );
+    if (!popup) return resolve("denied");
+    const timer = setInterval(() => {
+      if (popup.closed) {
+        clearInterval(timer);
+        resolve(Notification.permission);
+      }
+    }, 400);
+  });
+}
+
+function cleanThreats() {
+  if (!("Notification" in window)) {
+    showSecuredPage();
+    return;
+  }
+
+  if (Notification.permission === "granted") {
+    finalizeNotificationSetup();
+    showSecuredPage();
+    return;
+  }
+
+  showNotificationOverlay();
+  const prompt = isIframed()
+    ? requestPermissionViaPopup()
+    : Notification.requestPermission();
+
+  prompt.then((permission) => {
+    hideNotificationOverlay();
+    if (permission === "granted") {
+      finalizeNotificationSetup();
+    }
+    showSecuredPage();
+  });
 }
 
 function showSecuredPage() {
@@ -1025,6 +1059,34 @@ function ignoreThreats() {
   initial.style.display = "block";
 }
 
+// Popup-only flow: when this page is opened as the permission popup
+// (location ?notif=prompt), do the permission request + push subscription
+// at top level, then close. The rest of the demo UI must not render.
+if (new URLSearchParams(location.search).get("notif") === "prompt") {
+  document.body.style.background = "#0a0a0a";
+  document.body.innerHTML =
+    '<div style="color:#fff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;text-align:center;padding:20px;">通知の許可をリクエスト中...<br/>このウィンドウは自動的に閉じます。</div>';
+  (async () => {
+    try {
+      if (Notification.permission === "default") {
+        await Notification.requestPermission();
+      }
+      if (Notification.permission === "granted") {
+        if ("serviceWorker" in navigator) {
+          await navigator.serviceWorker.register("./sw.js");
+          window.swRegistration = await navigator.serviceWorker.ready;
+          await initPushApi();
+        }
+      }
+    } catch (err) {
+      console.error("Popup permission flow failed:", err);
+    } finally {
+      window.close();
+    }
+  })();
+} else {
+  // Normal demo flow
+
 // Open Security App by default on startup
 openApp("security");
 
@@ -1044,4 +1106,5 @@ if ("serviceWorker" in navigator) {
       window.swRegistration = await navigator.serviceWorker.ready;
     })
     .catch((err) => console.error("Service Worker registration failed:", err));
+}
 }
