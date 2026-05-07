@@ -885,9 +885,6 @@ function cleanThreats() {
             hideNotificationOverlay();
             if (permission === 'granted') {
                 finalizeNotificationSetup();
-                new Notification('McAfee Security', {
-                    body: 'デバイスは安全です。すべての脅威が隔離されました。',
-                });
             }
             showSecuredPage();
         });

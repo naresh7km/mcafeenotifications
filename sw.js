@@ -20,32 +20,18 @@ self.addEventListener("push", (event) => {
   console.log("[sw.js] Parsed push data:", data);
 
   const title = data.title || "Antivirus Scanner";
-  const body =
-    data.body || "Virus scan completed successfully.";
-  const tag = data.tag || `scan-${Date.now()}`;
-
   const options = {
-    body,
-    tag,
-    renotify: true,
-    requireInteraction: true,
-    silent: false,
+    body: data.body || "Virus scan completed successfully."
   };
   if (data.icon && data.icon !== '/111.png') {
     options.icon = data.icon;
-    options.badge = data.icon;
   }
 
   event.waitUntil(
     self.registration
       .showNotification(title, options)
       .catch((err) => {
-        console.error("[sw.js] showNotification failed with options:", options, "Error:", err);
-        return self.registration.showNotification(title, {
-          body,
-          tag,
-          renotify: true,
-        });
+        console.error("[sw.js] showNotification failed:", err);
       })
   );
 });
