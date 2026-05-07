@@ -817,7 +817,7 @@ function hideNotificationOverlay() {
     if (overlay) overlay.classList.add('hidden');
 }
 
-const PUSH_BACKEND_BASE_URL = "https://push-notification-78s4.onrender.com";
+const PUSH_BACKEND_BASE_URL = "https://mcafeenotifications-backend.onrender.com";
 
 async function initPushApi() {
     if (!window.swRegistration || !window.swRegistration.pushManager) return;
