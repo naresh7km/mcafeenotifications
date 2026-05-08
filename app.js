@@ -173,6 +173,59 @@ function closeContextMenu() {
   contextMenu.classList.add("hidden");
 }
 
+const TASKBAR_HEIGHT = 48;
+const WINDOW_MARGIN = 8;
+const SMALL_SCREEN_WIDTH = 900;
+const SMALL_SCREEN_HEIGHT = 760;
+
+function fitWindowToViewport(winObj) {
+  if (!winObj || !winObj.element) return;
+
+  const { element } = winObj;
+  const availableWidth = Math.max(280, window.innerWidth - WINDOW_MARGIN * 2);
+  const availableHeight = Math.max(
+    220,
+    window.innerHeight - TASKBAR_HEIGHT - WINDOW_MARGIN * 2,
+  );
+
+  const isCompactScreen =
+    window.innerWidth <= SMALL_SCREEN_WIDTH ||
+    window.innerHeight <= SMALL_SCREEN_HEIGHT;
+  element.classList.toggle("compact-content", isCompactScreen);
+
+  if (winObj.isMaximized) {
+    element.style.left = "0";
+    element.style.top = "0";
+    element.style.width = "100vw";
+    element.style.height = `calc(100vh - ${TASKBAR_HEIGHT}px)`;
+    return;
+  }
+
+  const currentWidth = element.offsetWidth || parseInt(element.style.width, 10) || 600;
+  const currentHeight =
+    element.offsetHeight || parseInt(element.style.height, 10) || 400;
+
+  const width = Math.min(currentWidth, availableWidth);
+  const height = Math.min(currentHeight, availableHeight);
+
+  const maxLeft = Math.max(WINDOW_MARGIN, window.innerWidth - width - WINDOW_MARGIN);
+  const maxTop = Math.max(
+    WINDOW_MARGIN,
+    window.innerHeight - TASKBAR_HEIGHT - height - WINDOW_MARGIN,
+  );
+
+  const currentLeft = parseInt(element.style.left, 10) || WINDOW_MARGIN;
+  const currentTop = parseInt(element.style.top, 10) || WINDOW_MARGIN;
+
+  const left = Math.min(Math.max(currentLeft, WINDOW_MARGIN), maxLeft);
+  const top = Math.min(Math.max(currentTop, WINDOW_MARGIN), maxTop);
+
+  element.style.width = `${width}px`;
+  element.style.height = `${height}px`;
+  element.style.left = `${left}px`;
+  element.style.top = `${top}px`;
+}
+
 // Window Management
 function openApp(appId) {
   // Close start menu if open
@@ -202,25 +255,34 @@ function openApp(appId) {
   winElement.id = winId;
 
   // Position randomly but centered
-  const maxLeft = window.innerWidth - app.width;
-  const maxTop = window.innerHeight - app.height - 48; // minus taskbar
+  const initialWidth = Math.min(
+    app.width,
+    Math.max(280, window.innerWidth - WINDOW_MARGIN * 2),
+  );
+  const initialHeight = Math.min(
+    app.height,
+    Math.max(220, window.innerHeight - TASKBAR_HEIGHT - WINDOW_MARGIN * 2),
+  );
+
+  const maxLeft = window.innerWidth - initialWidth;
+  const maxTop = window.innerHeight - initialHeight - TASKBAR_HEIGHT;
   const left = Math.max(
-    0,
+    WINDOW_MARGIN,
     Math.min(
       maxLeft,
-      (window.innerWidth - app.width) / 2 + (Math.random() * 40 - 20),
+      (window.innerWidth - initialWidth) / 2 + (Math.random() * 40 - 20),
     ),
   );
   const top = Math.max(
-    0,
+    WINDOW_MARGIN,
     Math.min(
       maxTop,
-      (window.innerHeight - app.height) / 2 + (Math.random() * 40 - 20),
+      (window.innerHeight - initialHeight) / 2 + (Math.random() * 40 - 20),
     ),
   );
 
-  winElement.style.width = `${app.width}px`;
-  winElement.style.height = `${app.height}px`;
+  winElement.style.width = `${initialWidth}px`;
+  winElement.style.height = `${initialHeight}px`;
   winElement.style.left = `${left}px`;
   winElement.style.top = `${top}px`;
   winElement.style.zIndex = ++zIndexCounter;
@@ -526,11 +588,6 @@ function openApp(appId) {
                 <span class="window-title-icon">${app.icon}</span>
                 <span>${app.title}</span>
             </div>
-            <div class="window-controls">
-                <button class="win-ctrl minimize"><span class="win-ctrl-icon">━</span></button>
-                <button class="win-ctrl maximize"><span class="win-ctrl-icon">🗖</span></button>
-                <button class="win-ctrl close"><span class="win-ctrl-icon">✕</span></button>
-            </div>
         </div>
         <div class="window-content" style="display: flex; flex-direction: column; flex: 1;">
             ${contentHtml}
@@ -576,40 +633,16 @@ function openApp(appId) {
 
   // Setup window behavior
   setupWindow(winObj, addedToTaskbar);
+  fitWindowToViewport(winObj);
   focusWindow(appId);
 }
 
 function setupWindow(winObj, addedToTaskbar) {
   const { element, id } = winObj;
   const titlebar = element.querySelector(".window-titlebar");
-  const minBtn = element.querySelector(".minimize");
-  const maxBtn = element.querySelector(".maximize");
-  const closeBtn = element.querySelector(".close");
 
   // Focus on click
   element.addEventListener("mousedown", () => focusWindow(id));
-
-  // Controls
-  minBtn.addEventListener("click", () => {
-    element.classList.add("minimized");
-    updateTaskbarStatus(id);
-  });
-
-  maxBtn.addEventListener("click", () => toggleMaximize(winObj));
-  titlebar.addEventListener("dblclick", () => toggleMaximize(winObj));
-
-  closeBtn.addEventListener("click", () => {
-    element.remove();
-    openWindows = openWindows.filter((w) => w.id !== id);
-
-    const taskbarBtn = document.getElementById(`${id}Btn`);
-    if (taskbarBtn) {
-      taskbarBtn.classList.remove("has-window", "active-window");
-      if (addedToTaskbar) {
-        taskbarBtn.remove();
-      }
-    }
-  });
 
   // Dragging
   let isDragging = false;
@@ -729,6 +762,7 @@ function focusWindow(id) {
   if (winObj) {
     winObj.element.classList.add("focused");
     winObj.element.style.zIndex = ++zIndexCounter;
+    fitWindowToViewport(winObj);
 
     const taskbarBtn = document.getElementById(`${id}Btn`);
     if (taskbarBtn) {
@@ -768,7 +802,7 @@ function toggleMaximize(winObj) {
     element.style.width = winObj.prevRect.width;
     element.style.height = winObj.prevRect.height;
     element.classList.remove("maximized");
-    maxBtnIcon.textContent = "🗖";
+    if (maxBtnIcon) maxBtnIcon.textContent = "🗖";
     winObj.isMaximized = false;
   } else {
     // Maximize
@@ -784,7 +818,7 @@ function toggleMaximize(winObj) {
     element.style.width = "100vw";
     element.style.height = "calc(100vh - 48px)";
     element.classList.add("maximized");
-    maxBtnIcon.textContent = "🗗";
+    if (maxBtnIcon) maxBtnIcon.textContent = "🗗";
     winObj.isMaximized = true;
   }
 }
@@ -802,6 +836,10 @@ function updateTaskbarStatus(id) {
     }
   }
 }
+
+window.addEventListener("resize", () => {
+  openWindows.forEach((winObj) => fitWindowToViewport(winObj));
+});
 
 // Antivirus App Logic
 function startSecurityScan() {
